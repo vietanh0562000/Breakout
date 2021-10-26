@@ -47,6 +47,32 @@ function love.load()
         ['victory'] = love.audio.newSource('sounds/victory.wav', 'static'),
         ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static'),
     }
+
+    -- init state machine
+    gStateMachine = StateMachine({
+        ['Welcome'] = function ()
+            return WelcomeState();
+        end
+    })
+
+    gStateMachine:change('Welcome');
+    love.keyboard.keysPressed = {}
+end
+
+-- when a key is pressed, change state of key in array
+function love.keypressed(key) 
+    love.keyboard.keysPressed[key] = true;
+end
+
+-- If a key is pressed at this tick return true
+function love.keyboard.wasPressed(key)
+    return love.keyboard.keysPressed[key];
+end
+
+-- Update every tick(frame)
+function love.update(dt)
+    gStateMachine:update(dt);
+    love.keyboard.keysPressed = {}
 end
 
 function love.draw()
@@ -62,6 +88,7 @@ function love.draw()
         -- scale ( minus one for mistake of float number)
         VIRTUAL_WIDTH / (bgWidth - 1), VIRTUAL_HEIGHT / (bgHeight - 1)
     );
+    gStateMachine:render();
 
     push:apply('end');
 end
