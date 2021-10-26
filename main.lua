@@ -25,9 +25,16 @@ function love.load()
     gTextures = {
         ['background'] = love.graphics.newImage('arts/background.png'),
         ['arrows'] = love.graphics.newImage('arts/arrows.png'),
-        ['blocks'] = love.graphics.newImage('arts/blocks.png'),
+        ['blocks'] = love.graphics.newImage('arts/breakout.png'),
         ['hearts'] = love.graphics.newImage('arts/hearts.png'),
         ['particle'] = love.graphics.newImage('arts/particle.png')
+    }
+
+    -- load all sprites in sprite sheet up there
+    gSprites = {
+        ['paddles'] = GenerateQuadsPaddles(gTextures['blocks']),
+        ['blocks'] = GenerateQuadsBlock(gTextures['blocks']),
+        ['balls'] = GenerateQuadsBall(gTextures['blocks'])
     }
 
     -- load all sounds
@@ -50,9 +57,8 @@ function love.load()
 
     -- init state machine
     gStateMachine = StateMachine({
-        ['Welcome'] = function ()
-            return WelcomeState();
-        end
+        ['Welcome'] = function () return WelcomeState(); end,
+        ['Play'] = function() return PlayState(); end,
     })
 
     gStateMachine:change('Welcome');

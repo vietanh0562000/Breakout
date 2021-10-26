@@ -14,6 +14,14 @@ function WelcomeState:update()
         gSounds['paddle_hit']:play();
     end
 
+    -- player press menu, game will change follow selectedOption
+    if love.keyboard.wasPressed('return') then
+        if (self.selectedOption == 0) then
+           gStateMachine:change('Play');
+        end
+    end
+
+    -- player press quit
     if love.keyboard.wasPressed('escape') then
         love.event.quit();
     end
