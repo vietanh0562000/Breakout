@@ -64,6 +64,12 @@ function love.load()
     })
 
     gStateMachine:change('Welcome');
+
+    -- Play music background
+    gSounds['music']:setVolume(0.2);
+    gSounds['music']:setLooping(true);
+    gSounds['music']:play();
+
     love.keyboard.keysPressed = {}
 end
 

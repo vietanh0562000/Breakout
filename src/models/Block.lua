@@ -18,7 +18,7 @@ function Block:update(dt)
 end
 
 function Block:render()
-    love.graphics.draw(gTextures['blocks'], gSprites['blocks'][2], self.x, self.y);
+    love.graphics.draw(gTextures['blocks'], gSprites['blocks'][self.level], self.x, self.y);
 end
 
 function Block:crack()

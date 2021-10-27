@@ -6,7 +6,7 @@ function Ball:init(posX, posY)
     self.y = posY;
 
     -- init radius
-    self.radius = 2;
+    self.radius = 4;
 
     -- init velocity
     self.dx = 0;

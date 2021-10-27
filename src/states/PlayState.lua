@@ -7,11 +7,13 @@ PlayState = Class{__includes = BaseState}
 
 -- Call before the first frame of play state
 function PlayState:init()
-    self.paddle = Paddle();
-    self.blocks = LevelMaker:spawnBlocks(1);
-    self.ball = Ball(self.paddle.x + self.paddle.width / 2 - 4, self.paddle.y - 5);
+    self.level = 1;
     self.score = 0;
     self.hp = 3;
+
+    self.paddle = Paddle();
+    self.blocks = LevelMaker:spawnBlocks(self.level);
+    self.ball = Ball(self.paddle.x + self.paddle.width / 2 - 4, self.paddle.y - 5);
 end
 
 -- Call every frame of play state
@@ -24,8 +26,21 @@ function PlayState:update(dt)
     -- update paddle every frame
     self.paddle:update(dt);
     -- if ball collide with block it change direction and increase speed
-    if self.ball:collide(self.paddle) then
-        self.ball.dy = -self.ball.dy * 1.1;
+    if (self.ball.state == 1) and (self.ball:collide(self.paddle)) then
+        self.ball.y = self.paddle.y - 8;
+        self.ball.dy = -self.ball.dy;
+
+        -- if collide when move paddle
+        -- collide left paddle when it move left
+        if (self.ball.x < self.paddle.x + self.paddle.width / 2) and (self.paddle.dx < 0) then
+            self.ball.dx = -50 + - (8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x));  
+            
+        -- collide right paddle when move right    
+        elseif (self.ball.x > self.paddle.x + self.paddle.width / 2) and (self.paddle.dx > 0) then
+            self.ball.dx = 50 + (8 * (self.ball.x - self.paddle.x + self.paddle.width / 2));
+        end
+
+        gSounds['paddle_hit']:play();
     end
 
 
@@ -38,7 +53,24 @@ function PlayState:update(dt)
         -- Each time collide block player get one point
         if self.ball:collide(block) then
             -- change direction the ball
-            self.ball.dy = -self.ball.dy;
+            
+            -- collide at right
+            if (self.ball.x + 2 > block.x + block.width) then
+                self.ball.dx = -self.ball.dx;
+
+            -- collide at left    
+            elseif (self.ball.x + self.ball.radius < block.x) then    
+                self.ball.dx = -self.ball.dx;
+
+            -- collide at bottom    
+            elseif (self.ball.y + 2 > block.y + block.height) then    
+                self.ball.dy = -self.ball.dy;
+
+            -- collide at top    
+            elseif (self.ball.y + self.ball.radius < block.y) then
+                self.ball.dy = -self.ball.dy;    
+            end
+
 
             -- break block
             block:crack();
@@ -52,6 +84,13 @@ function PlayState:update(dt)
         if block.level == 0 then
             table.remove( self.blocks, k);
         end
+    end
+    
+    -- if all block is clear then up level. reset ball waiting to serve
+    if (#self.blocks == 0) then
+        self.level = self.level + 1;
+        self.blocks = LevelMaker:spawnBlocks(self.level);
+        self.ball:reset(self.paddle);
     end
 
     -- update ball every frame
