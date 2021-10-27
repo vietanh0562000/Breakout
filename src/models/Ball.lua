@@ -16,6 +16,16 @@ function Ball:init(posX, posY)
     self.state = 0;
 end
 
+-- reset ball to (waiting serve state) 
+function Ball:reset(paddle)
+    self.state = 0;
+    self.x = paddle.x + paddle.width / 2 - 4;
+    self.y = paddle.y - 5;
+    self.dx = 0;
+    self.dy = 0;
+end
+
+-- update ball every frame
 function Ball:update(dt)
     -- if lay on paddle move like paddle
     if self.state == 0 then

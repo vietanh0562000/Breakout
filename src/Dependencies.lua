@@ -15,3 +15,4 @@ require 'src/StateMachine'
 require 'src/states/BaseState';
 require 'src/states/WelcomeState';
 require 'src/states/PlayState';
+require 'src/states/GameOverState';
