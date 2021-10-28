@@ -87,3 +87,60 @@ function GenerateQuadsHeart(atlas)
 
     return quads;
 end
+
+--[[
+    Load high scores from file local (or get file from server)
+]]
+function GetHighScores()
+    love.filesystem.setIdentity("Breakout");
+
+    -- if file not exist. Create it
+    if not love.filesystem.getInfo('HighScores.lst') then
+        local scores = '';
+        for i = 10, 1, -1 do
+            scores = scores .. 'CTO\n';
+            scores = scores .. tostring(i) .. '\n';
+        end
+
+        love.filesystem.write('HighScores.lst', scores);
+    end
+
+    -- Reading high scores
+    local isName = true;
+    local currentName = nil;
+    local counter = 1;
+
+    local scores = {};
+
+    -- create blank table scores
+    for i = 1, 10 do
+        scores[i] = {
+            name = nil,
+            score = nil
+        }
+    end
+
+    -- fill from file to talble
+    for line in love.filesystem.lines('HighScores.lst') do
+        if isName then
+            scores[counter].name = string.sub(line, 1, 3);
+        else
+            scores[counter].score = tonumber(line);    
+            counter = counter + 1;
+        end
+
+        isName = not isName;
+    end
+
+    return scores;
+end
+
+function WriteHighScores(highScores)
+    local scoresText = '';
+    for i = 1, 10 do
+        scoresText = scoresText .. tostring(highScores[i].name) .. '\n';
+        scoresText = scoresText .. tostring(highScores[i].score) .. '\n'; 
+    end
+
+    love.filesystem.write('HighScores.lst', scoresText);
+end

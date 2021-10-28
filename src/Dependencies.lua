@@ -16,3 +16,5 @@ require 'src/states/BaseState';
 require 'src/states/WelcomeState';
 require 'src/states/PlayState';
 require 'src/states/GameOverState';
+require 'src/states/HighScoreState';
+require 'src/states/EnterNameState';

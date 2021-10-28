@@ -8,7 +8,7 @@ PlayState = Class{__includes = BaseState}
 -- Call before the first frame of play state
 function PlayState:init()
     self.level = 1;
-    self.score = 0;
+    self.score = 10000;
     self.hp = 3;
 
     self.paddle = Paddle();
@@ -132,6 +132,11 @@ function PlayState:render(dt)
     -- draw all blocks
     for k, block in pairs(self.blocks) do
         block:render();
+    end
+
+    -- draw all paricles of block
+    for k, block in pairs(self.blocks) do
+        block:renderPaticles();
     end
 
     -- draw the ball

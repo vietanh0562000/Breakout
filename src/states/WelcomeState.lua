@@ -19,6 +19,9 @@ function WelcomeState:update()
         if (self.selectedOption == 0) then
            gStateMachine:change('Play');
         end
+        if (self.selectedOption == 1) then
+            gStateMachine:change('HighScores');
+        end
     end
 
     -- player press quit

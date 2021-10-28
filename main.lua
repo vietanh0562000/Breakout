@@ -61,6 +61,8 @@ function love.load()
         ['Welcome'] = function () return WelcomeState(); end,
         ['Play'] = function() return PlayState(); end,
         ['GameOver'] = function() return GameOverState(); end,
+        ['HighScores'] = function () return HighScoreState(); end,
+        ['EnterName'] = function () return EnterNameState(); end
     })
 
     gStateMachine:change('Welcome');

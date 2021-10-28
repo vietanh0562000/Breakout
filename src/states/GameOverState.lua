@@ -2,15 +2,22 @@
 
 function GameOverState:init()
     self.score = 0;
+    self.highScores = GetHighScores();
 end
 
 function GameOverState:enter(params)
     self.score = params.score;
+    if (self.highScores[10].score < self.score) then
+        gStateMachine:change('EnterName',{
+            score = self.score,
+            highScores = self.highScores
+        });
+    end;
 end
 
 function GameOverState:update(dt)
     if love.keyboard.wasPressed('return') then
-        gStateMachine:change('Play');
+            gStateMachine:change('Play');
     end
 end
 
